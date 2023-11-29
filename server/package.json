@@ -1,0 +1,16 @@
+{
+  "dependencies": {
+    "body-parser": "*",
+    "cheerio": "^1.0.0-rc.12",
+    "cors": "2.8.4",
+    "express": "4.16.3",
+    "nodemon": "1.18.3",
+    "pg": "8.0.3",
+    "redis": "2.8.0",
+    "request-promise": "^4.2.6"
+  },
+  "scripts": {
+    "dev": "NODE_ENV=development nodemon -L src/index.js",
+    "start": "NODE_ENV=production node src/index.js"
+  }
+}

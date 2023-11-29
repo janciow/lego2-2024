@@ -1,0 +1,56 @@
+version: "3.8"
+
+networks:
+  create_db_default:
+    external: true
+
+services:
+  nginx:
+    depends_on:
+      - api
+      - client
+    build:
+      dockerfile: Dockerfile.dev
+      context: ./nginx
+    ports:
+      - "3050:80"
+    networks:
+      - create_db_default
+  api:
+    build:
+      dockerfile: Dockerfile.dev
+      context: ./server
+    volumes:
+      - /app/node_modules
+      - ./server:/app
+    environment:
+      - PGUSER=jan.bancarewicz
+      - PGHOST=postgres
+      - PGDATABASE=jan_db
+      - PGPASSWORD=1qaz2wsx#EDC
+      - PGPORT=5432
+    networks:
+      - create_db_default
+  client:
+    depends_on:
+      - api
+    env_file: ./.env
+    ports:
+      - $REACT_LOCAL_PORT:$REACT_DOCKER_PORT
+    environment:
+      - WATCHPACK_POLLING=true
+      - WDS_SOCKET_HOST=127.0.0.1
+      - WDS_SOCKET_PORT=$REACT_LOCAL_PORT
+    build:
+      dockerfile: Dockerfile.dev
+      context: ./client
+    volumes:
+      - $REACT_APP_PATH:/client
+      - /client/node_modules
+    networks:
+      - create_db_default
+
+volumes:
+  local_pgdata:
+  pgadmin-data:
+
