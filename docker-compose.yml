@@ -17,12 +17,13 @@ services:
     networks:
       - create_db_default
   api:
+    ports:
+      - 5000:5000
     build:
       dockerfile: Dockerfile.dev
       context: ./server
     volumes:
-      - /app/node_modules
-      - ./server:/app
+      - ./server/src:/app/src
     environment:
       - PGUSER=jan.bancarewicz
       - PGHOST=postgres
@@ -45,12 +46,12 @@ services:
       dockerfile: Dockerfile.dev
       context: ./client
     volumes:
-      - $REACT_APP_PATH:/client
-      - /client/node_modules
+      - ./client/public:/client/public
+      - ./client/src:/client/src
+    stdin_open: true
+    tty: true
     networks:
       - create_db_default
 
 volumes:
-  local_pgdata:
-  pgadmin-data:
-
+  raeact_data:

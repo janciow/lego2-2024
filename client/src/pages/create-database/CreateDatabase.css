@@ -1,0 +1,19 @@
+.create-database {}
+
+.create-database__wrapper {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  grid-auto-rows: 1fr;
+  gap: 30px;
+}
+
+.create-database__table table {
+  width: 100%;
+}
+
+.create-database__buttons {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  grid-auto-rows: 1fr;
+  gap: 20px;
+}

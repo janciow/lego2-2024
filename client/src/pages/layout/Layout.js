@@ -1,8 +1,10 @@
 import { Outlet, Link } from "react-router-dom";
-
+import './Layout.css';
 const Layout = () => {
   return (
-    <>
+    <div className="layout">
+
+      <div className="layout__img"></div>
       <nav>
         <ul>
           <li> 
@@ -20,11 +22,17 @@ const Layout = () => {
           <li>
             <Link to="/insert-bricks">Insert bricks to DB</Link>
           </li>
+          <li>
+            <Link to="/create-database">Create database</Link>
+          </li>
         </ul>
       </nav>
 
-      <Outlet />
-    </>
+    <div className="layout__outlet">
+    <Outlet />
+    </div>
+ 
+    </div>
   )
 };
 

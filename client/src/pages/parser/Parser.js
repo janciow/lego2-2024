@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import ParsedJsonTable from '../../components/tables/ParsedJsonTable';
+import './Parser.css';
 
 class Parser extends Component {
   state = {
@@ -24,7 +26,7 @@ class Parser extends Component {
 
   downloadTxtFile = () => {
     const element = document.createElement("a");
-    const file = new Blob([this.state.json], {type: 'text/plain'});
+    const file = new Blob([this.state.json], { type: 'text/plain' });
     element.href = URL.createObjectURL(file);
     element.download = `${this.state.setNumber}.json`;
     document.body.appendChild(element); // Required for this to work in FireFox
@@ -34,12 +36,12 @@ class Parser extends Component {
   handleSubmitJson = async (event) => {
     event.preventDefault();
 
-   const response = await axios.post('/api/parser/creat-json', {
+    const response = await axios.post('/api/parser/creat-json', {
       url: this.state.url,
       setNumber: this.state.setNumber,
     });
 
-     this.setState({json: response.data.data}) 
+    this.setState({ json: response.data.data })
   };
 
   createLinksTable = async (event) => {
@@ -50,10 +52,8 @@ class Parser extends Component {
     this.setState({ setNumber, url, json });
   };
 
-  linikListDB = async (event) => {
-    event.preventDefault();
-    const values = await axios.get('/api/parser/list');
-    this.setState({ linikListDB: values.data.result.rows });
+  handleClick = (json, setnumber, url) => {
+    this.setState({ setnumber, url, json });
   };
 
   linikList = async (event) => {
@@ -69,7 +69,7 @@ class Parser extends Component {
         <tr key={this.state.linikList.data[key].setNumber}>
           <td>For setNumber: {this.state.linikList.data[key].setNumber}</td>
           <td> url: {this.state.linikList.data[key].url}</td>
-          <td><button onClick={this.setRow.bind(null, this.state.linikList.data[key].setNumber, this.state.linikList.data[key].url, '' )}>set link</button></td>
+          <td><button onClick={this.setRow.bind(null, this.state.linikList.data[key].setNumber, this.state.linikList.data[key].url, '')}>set link</button></td>
         </tr>
       );
     }
@@ -86,7 +86,7 @@ class Parser extends Component {
           <td>{this.state.linikListDB[key].url}</td>
           <td>{(this.state.linikListDB[key].json && 'yest') || 'nie ma'}</td>
           <td><button onClick={
-            this.setRow.bind(null, this.state.linikListDB[key].setnumber, this.state.linikListDB[key].url, this.state.linikListDB[key].json )
+            this.setRow.bind(null, this.state.linikListDB[key].setnumber, this.state.linikListDB[key].url, this.state.linikListDB[key].json)
           }>set link</button></td>
         </tr>
       );
@@ -97,24 +97,26 @@ class Parser extends Component {
 
   render() {
     return (
-      <div>
-         <h1>Parser</h1>
-        <h3>Insert link:</h3>
-        <form onSubmit={this.handleSubmit}>
-          <label>Enter your url:</label>
-          <input
-            value={this.state.url}
-            onChange={(event) => this.setState({ url: event.target.value })}
-          />
+      <>
+        <h1>Parser</h1>
+        <div className='parser__form'>
 
-          <label>Enter your setNumber:</label>
-          <input
-            value={this.state.setNumber}
-            onChange={(event) => this.setState({ setNumber: event.target.value })}
-          />
-          <button >Submit</button>
-        </form>
+          <h3>Insert link:</h3>
+          <form onSubmit={this.handleSubmit}>
+            <label>Enter your url:</label>
+            <input
+              value={this.state.url}
+              onChange={(event) => this.setState({ url: event.target.value })}
+            />
 
+            <label>Enter your setNumber:</label>
+            <input
+              value={this.state.setNumber}
+              onChange={(event) => this.setState({ setNumber: event.target.value })}
+            />
+            <button >Submit</button>
+          </form>
+        </div>
         <hr />
 
         <h3>get JSON :</h3>
@@ -138,12 +140,7 @@ class Parser extends Component {
 
         <hr />
         <h3>render Values DB :</h3>
-        <button onClick={this.linikListDB}>get Links Table</button>
-        <table>
-          <tbody>
-            {this.renderValuesDB()}
-          </tbody>
-        </table>
+        <ParsedJsonTable rowButtonClick={this.handleClick} />
 
         <hr />
         <h3>JSON:</h3>
@@ -161,11 +158,11 @@ class Parser extends Component {
         <h3>static lini kList Values :</h3>
         <button onClick={this.linikList}>linik List</button>
         <table>
-        <tbody>
-          {this.renderValues()}
+          <tbody>
+            {this.renderValues()}
           </tbody>
         </table>
-      </div>
+      </>
     );
   }
 }

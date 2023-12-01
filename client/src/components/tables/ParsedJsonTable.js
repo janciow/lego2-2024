@@ -19,16 +19,15 @@ const ParsedJsonTable = (props) => {
         }
     };
 
-
     const onClick = (json, setnumber, url) => {
-        // props.sendData(user)
-        console.log(json, setnumber, url);
+        props.rowButtonClick(json, setnumber, url)
       }
 
     return (
         <div>
-            <h1>Import images</h1>
+            <h1>Import images 33</h1>
             <h3>parsed JSON</h3>
+            <button onClick={() => getImageListForSet()}>get Links Table</button>
             <table >
                 <thead>
                     <tr>
@@ -44,7 +43,7 @@ const ParsedJsonTable = (props) => {
                             <td>{setnumber}</td>
                             <td>{url}</td>
                             <td>{(json && 'yest') || 'nie ma'}</td>
-                            <td><button onClick={() => onClick (json, setnumber, url)}>Get JSON</button></td>
+                            <td><button onClick={() => onClick(json, setnumber, url)}>Get JSON</button></td>
                         </tr>
                     ))}
                 </tbody>

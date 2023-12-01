@@ -1,0 +1,26 @@
+.layout {
+  background-color: transparent;
+  position: relative;
+  z-index: 2;
+}
+
+.layout__img {
+  position: absolute;
+  width: 100vw;
+  height: 100%;
+  background-image: url('/public/img/homark.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  opacity: 0.1;
+  z-index: 1;
+}
+
+nav {
+  position: relative;
+  z-index: 3;
+}
+
+.layout__outlet {
+  position: relative;
+  z-index: 3;
+}
