@@ -46,7 +46,6 @@ services:
       dockerfile: Dockerfile.dev
       context: ./client
     volumes:
-      - ./client/public:/client/public
       - ./client/src:/client/src
     stdin_open: true
     tty: true

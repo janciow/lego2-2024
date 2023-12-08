@@ -58,6 +58,15 @@ const CreateDatabase = () => {
         }
     };
 
+
+    const createBrickTable = async () => {
+        try {
+            await axios.post("/api/create-database/create-brick-table");
+        } catch (error) {
+            console.error("Error creating post:", error);
+        }
+    };
+
     return (
         <div className="create-database">
             <h1>Create Database 3</h1>
@@ -86,6 +95,21 @@ const CreateDatabase = () => {
 
                     <h3>get Exact Colors</h3>
                     <button onClick={() => getExactColors()}>get exact Colors</button>
+                </div>
+
+                <div className="create-database__table">
+                    <SimpleTable list={exactColors} key1="color_exact_id" key2="name" />
+                </div>
+            </div>
+            <hr />
+            <h2> Brick </h2>
+            <div className="create-database__wrapper">
+                <div className="create-database__buttons">
+                    <h3>Create Brick table</h3>
+                    <button onClick={() => createBrickTable()}>Create Brick table</button>
+
+                    {/* <h3>get Exact Colors</h3>
+                    <button onClick={() => getExactColors()}>get exact Colors</button> */}
                 </div>
 
                 <div className="create-database__table">

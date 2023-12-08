@@ -25,9 +25,8 @@ const ParsedJsonTable = (props) => {
 
     return (
         <div>
-            <h1>Import images 33</h1>
-            <h3>parsed JSON</h3>
-            <button onClick={() => getImageListForSet()}>get Links Table</button>
+            <h3>parsed JSON form DB</h3>
+            <button onClick={() => getImageListForSet()}>reload Links Table from DB</button>
             <table >
                 <thead>
                     <tr>

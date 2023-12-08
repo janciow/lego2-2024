@@ -60,7 +60,7 @@ router.get('/color-family', async (req, res) => {
 router.post('/create-color-exact-table', (req, res) => {
     pgClient.query(`
     CREATE TABLE IF NOT EXISTS color_exact(
-        color_exact_id SERIAL,
+        color_exact_id  VARCHAR(16) UNIQUE,
         name VARCHAR(100) UNIQUE,
         color_family_id INT,
         PRIMARY KEY (color_exact_id),
@@ -78,12 +78,41 @@ router.post('/create-color-exact-table', (req, res) => {
 });
 
 
+
+
 // /create-database/color-exact
 router.get('/color-exact', async (req, res) => {
     const result = await pgClient.query(`
         select * from color_exact;
     `, []);
     res.send({ result: result.rows });
+});
+
+// /create-database/create-brick-table
+router.post('/create-brick-table', (req, res) => {
+    pgClient.query(`
+    CREATE TABLE IF NOT EXISTS brick(
+          element_id VARCHAR(16) UNIQUE,
+          color_exact_id INT,
+          category VARCHAR(100),
+          model_id VARCHAR(10),
+          price DECIMAL(8, 2),
+          description VARCHAR(200),
+          img_pathname VARCHAR(200),
+          quantity_free_bricks INT,
+          quantity_total INT,
+        PRIMARY KEY (element_id),
+        CONSTRAINT fk_color_exact
+              FOREIGN KEY(color_exact_id) 
+                  REFERENCES color_exact(color_exact_id)
+    );
+      `)
+        .catch((err) => {
+            res.setHeader('Content-Type', 'text/html');
+            res.send({ INSERT: err });
+        });
+
+    res.send({ CREATE: 'ok' });
 });
 
 

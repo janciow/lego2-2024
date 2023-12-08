@@ -13,9 +13,7 @@ const pgClient = new Pool({
 });
 
 pgClient.on('connect', (client) => {
-  client
-    .query(`CREATE TABLE IF NOT EXISTS links2 (number INT)`)
-    .catch((err) => console.error(err));
+ console.log('connected')
 });
 
 module.exports = pgClient;

@@ -1,9 +1,9 @@
 const fs = require('fs');
 const download = require('./download');
 
-const getImages = function (setNumber, jsonSring) {
+const getImages = function (setNumber, jsonString) {
     // let rawData = fs.readFileSync(`jsons_lego/${setNumber}.json`);
-    let legoSet = JSON.parse(jsonSring);
+    let legoSet = JSON.parse(jsonString);
     const dir = './img';
     if (!fs.existsSync(dir)) {
         fs.mkdirSync(dir);

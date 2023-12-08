@@ -7,9 +7,9 @@ class Parser extends Component {
   state = {
     url: '',
     setNumber: '',
-    linikList: [],
     json: '',
-    linikListDB: [],
+    linkList: [],
+    linkListDB: [],
   };
 
   componentDidMount() { }
@@ -53,23 +53,24 @@ class Parser extends Component {
   };
 
   handleClick = (json, setnumber, url) => {
-    this.setState({ setnumber, url, json });
+    this.setState({ setNumber: setnumber, url, json });
   };
 
-  linikList = async (event) => {
+  linkList = async (event) => {
     event.preventDefault();
     const values = await axios.get('/api/parser/link/list');
-    this.setState({ linikList: values.data });
+    this.setState({ linkList: values.data });
   };
 
   renderValues() {
     const entries = [];
-    for (let key in this.state.linikList.data) {
+    const { linkList } = this.state;
+    for (let key in linkList.data) {
       entries.push(
-        <tr key={this.state.linikList.data[key].setNumber}>
-          <td>For setNumber: {this.state.linikList.data[key].setNumber}</td>
-          <td> url: {this.state.linikList.data[key].url}</td>
-          <td><button onClick={this.setRow.bind(null, this.state.linikList.data[key].setNumber, this.state.linikList.data[key].url, '')}>set link</button></td>
+        <tr key={linkList.data[key].setNumber}>
+          <td>For setNumber: {linkList.data[key].setNumber}</td>
+          <td> url: {linkList.data[key].url}</td>
+          <td><button onClick={this.setRow.bind(null, linkList.data[key].setNumber, linkList.data[key].url, '')}>set link</button></td>
         </tr>
       );
     }
@@ -79,14 +80,15 @@ class Parser extends Component {
 
   renderValuesDB() {
     const entries = [];
-    for (let key in this.state.linikListDB) {
+    const { linkListDB } = this.state;
+    for (let key in linkListDB) {
       entries.push(
-        <tr key={this.state.linikListDB[key].setnumber}>
-          <td>{this.state.linikListDB[key].setnumber}</td>
-          <td>{this.state.linikListDB[key].url}</td>
-          <td>{(this.state.linikListDB[key].json && 'yest') || 'nie ma'}</td>
+        <tr key={linkListDB[key].setnumber}>
+          <td>{linkListDB[key].setnumber}</td>
+          <td>{linkListDB[key].url}</td>
+          <td>{(linkListDB[key].json && 'yest') || 'nie ma'}</td>
           <td><button onClick={
-            this.setRow.bind(null, this.state.linikListDB[key].setnumber, this.state.linikListDB[key].url, this.state.linikListDB[key].json)
+            this.setRow.bind(null, linkListDB[key].setnumber, linkListDB[key].url, linkListDB[key].json)
           }>set link</button></td>
         </tr>
       );
@@ -99,10 +101,31 @@ class Parser extends Component {
     return (
       <>
         <h1>Parser</h1>
-        <div className='parser__form'>
 
-          <h3>Insert link:</h3>
-          <form onSubmit={this.handleSubmit}>
+        <div className='parser__wrapper'>
+          <div>
+          <div className='parser__form'>
+
+            <h3>Insert link:</h3>
+            <form onSubmit={this.handleSubmit}>
+              <label>Enter your url:</label>
+              <input
+                value={this.state.url}
+                onChange={(event) => this.setState({ url: event.target.value })}
+              />
+
+              <label>Enter your setNumber</label>
+              <input
+                value={this.state.setNumber}
+                onChange={(event) => this.setState({ setNumber: event.target.value })}
+              />
+              <button >Submit</button>
+            </form>
+          </div>
+          <hr />
+
+          <h3>get JSON :</h3>
+          <form onSubmit={this.handleSubmitJson}>
             <label>Enter your url:</label>
             <input
               value={this.state.url}
@@ -116,52 +139,35 @@ class Parser extends Component {
             />
             <button >Submit</button>
           </form>
+
+          <hr />
+          <button onClick={this.createLinksTable}>create Links Table dlete old one</button>
+
+          <hr />
+          <h3>Render Values from DB :</h3>
+          <ParsedJsonTable rowButtonClick={this.handleClick} />
+          
+          <h3>JSON:</h3>
+          <div>
+            <button onClick={this.handleSubmit}>update json in DB</button>
+            <button onClick={this.downloadTxtFile}>Download txt to file</button>
+          </div>
+          <div>{this.state.url}</div>
+          <div>{this.state.setNumber}</div>
+          <pre>
+            {this.state.json}
+          </pre>
         </div>
-        <hr />
-
-        <h3>get JSON :</h3>
-        <form onSubmit={this.handleSubmitJson}>
-          <label>Enter your url:</label>
-          <input
-            value={this.state.url}
-            onChange={(event) => this.setState({ url: event.target.value })}
-          />
-
-          <label>Enter your setNumber:</label>
-          <input
-            value={this.state.setNumber}
-            onChange={(event) => this.setState({ setNumber: event.target.value })}
-          />
-          <button >Submit</button>
-        </form>
-
-        <hr />
-        <button onClick={this.createLinksTable}>create Links Table dlete old one</button>
-
-        <hr />
-        <h3>render Values DB :</h3>
-        <ParsedJsonTable rowButtonClick={this.handleClick} />
-
-        <hr />
-        <h3>JSON:</h3>
         <div>
-          <button onClick={this.handleSubmit}>update json</button>
-          <button onClick={this.downloadTxtFile}>Download txt</button>
+          <h3>Static link List Values :</h3>
+          <button onClick={this.linkList}>linik List</button>
+          <table>
+            <tbody>
+              {this.renderValues()}
+            </tbody>
+          </table>
         </div>
-        <div>{this.state.url}</div>
-        <div>{this.state.setNumber}</div>
-        <pre>
-          {this.state.json}
-        </pre>
-
-        <hr />
-        <h3>static lini kList Values :</h3>
-        <button onClick={this.linikList}>linik List</button>
-        <table>
-          <tbody>
-            {this.renderValues()}
-          </tbody>
-        </table>
+      </div >
       </>
     );
   }
