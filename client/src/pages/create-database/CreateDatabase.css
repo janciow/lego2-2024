@@ -1,10 +1,19 @@
-.create-database {}
+.create-database {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto 1fr;
+  gap: 20px;
+}
 
 .create-database__wrapper {
   display: grid;
   grid-template-columns: 1fr 2fr;
   grid-auto-rows: 1fr;
   gap: 30px;
+}
+
+.create-database__panel--bricks {
+  grid-row: 1 / span 2;
 }
 
 .create-database__table table {
@@ -14,6 +23,7 @@
 .create-database__buttons {
   display: grid;
   grid-template-columns: 2fr 1fr;
-  grid-auto-rows: 1fr;
+  align-content: baseline;
+  justify-content: space-evenly;
   gap: 20px;
 }

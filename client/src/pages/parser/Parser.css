@@ -5,8 +5,7 @@
 
 .parser__wrapper {
     display: grid;
-    grid-template-columns: 1fr 2fr;
-    grid-auto-rows: 1fr;
+    grid-template-columns: 1fr 1fr;
     gap: 30px;
   }
   

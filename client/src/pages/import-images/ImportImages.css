@@ -2,7 +2,7 @@
 
 .import-images__wrapper {
   display: grid;
-  grid-template-columns: 1fr 2fr;
+  grid-template-columns: 50% 50%;
   grid-auto-rows: 1fr;
   gap: 30px;
 }

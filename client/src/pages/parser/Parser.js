@@ -14,10 +14,10 @@ class Parser extends Component {
 
   componentDidMount() { }
 
-  handleSubmit = async (event) => {
+  insertJsonToDb = async (event) => {
     event.preventDefault();
 
-    await axios.post('/api/parser/add-link', {
+    await axios.post('/api/parser/insert-json-to-db', {
       url: this.state.url,
       setNumber: this.state.setNumber,
       json: this.state.json,
@@ -104,70 +104,67 @@ class Parser extends Component {
 
         <div className='parser__wrapper'>
           <div>
-          <div className='parser__form'>
-
-            <h3>Insert link:</h3>
-            <form onSubmit={this.handleSubmit}>
+            <h3>Create JSON using data from this link:</h3>
+            <form onSubmit={this.handleSubmitJson}>
               <label>Enter your url:</label>
               <input
                 value={this.state.url}
                 onChange={(event) => this.setState({ url: event.target.value })}
               />
 
-              <label>Enter your setNumber</label>
+              <label>Enter your setNumber:</label>
               <input
                 value={this.state.setNumber}
                 onChange={(event) => this.setState({ setNumber: event.target.value })}
               />
               <button >Submit</button>
             </form>
+            <hr />
+            <div className='parser__form'>
+              <h3>Insert parsed JSON in to DB:</h3>
+              <form onSubmit={this.insertJsonToDb}>
+                <label>Enter your url:</label>
+                <input
+                  value={this.state.url}
+                  onChange={(event) => this.setState({ url: event.target.value })}
+                />
+
+                <label>Enter your setNumber</label>
+                <input
+                  value={this.state.setNumber}
+                  onChange={(event) => this.setState({ setNumber: event.target.value })}
+                />
+                <button >Submit</button>
+              </form>
+            </div>
+
+            <hr />
+            <button onClick={this.createLinksTable}>create Links Table dlete old one</button>
+
+            <hr />
+            <ParsedJsonTable rowButtonClick={this.handleClick} />
+
+            <h3>JSON:</h3>
+            <div>
+              <button onClick={this.handleSubmit}>update json in DB</button>
+              <button onClick={this.downloadTxtFile}>Download txt to file</button>
+            </div>
+            <div>{this.state.url}</div>
+            <div>{this.state.setNumber}</div>
+            <pre>
+              {this.state.json}
+            </pre>
           </div>
-          <hr />
-
-          <h3>get JSON :</h3>
-          <form onSubmit={this.handleSubmitJson}>
-            <label>Enter your url:</label>
-            <input
-              value={this.state.url}
-              onChange={(event) => this.setState({ url: event.target.value })}
-            />
-
-            <label>Enter your setNumber:</label>
-            <input
-              value={this.state.setNumber}
-              onChange={(event) => this.setState({ setNumber: event.target.value })}
-            />
-            <button >Submit</button>
-          </form>
-
-          <hr />
-          <button onClick={this.createLinksTable}>create Links Table dlete old one</button>
-
-          <hr />
-          <h3>Render Values from DB :</h3>
-          <ParsedJsonTable rowButtonClick={this.handleClick} />
-          
-          <h3>JSON:</h3>
           <div>
-            <button onClick={this.handleSubmit}>update json in DB</button>
-            <button onClick={this.downloadTxtFile}>Download txt to file</button>
+            <h3>Static link List Values :</h3>
+            <button onClick={this.linkList}>linik List</button>
+            <table>
+              <tbody>
+                {this.renderValues()}
+              </tbody>
+            </table>
           </div>
-          <div>{this.state.url}</div>
-          <div>{this.state.setNumber}</div>
-          <pre>
-            {this.state.json}
-          </pre>
-        </div>
-        <div>
-          <h3>Static link List Values :</h3>
-          <button onClick={this.linkList}>linik List</button>
-          <table>
-            <tbody>
-              {this.renderValues()}
-            </tbody>
-          </table>
-        </div>
-      </div >
+        </div >
       </>
     );
   }

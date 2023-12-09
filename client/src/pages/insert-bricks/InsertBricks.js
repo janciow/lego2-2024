@@ -1,6 +1,8 @@
 import { useState } from "react";
 import axios from "axios";
-import ParsedJsonTable from "../components/tables/ParsedJsonTable";
+import ParsedJsonTable from "../../components/tables/ParsedJsonTable";
+
+import './InsertBricks.css';
 
 const InsertBricks = () => {
 
@@ -23,7 +25,7 @@ const InsertBricks = () => {
             const response = await axios.post("/api/insert-bricks/preview-data-to-insert-bricks", {
                 url, setnumber, json,
             });
-            getPreviewQuery(response.data.insertColorQuery);
+            getPreviewQuery(response.data.brickQuery);
         } catch (error) {
             console.error("Error creating post:", error);
         }
@@ -35,7 +37,7 @@ const InsertBricks = () => {
             await axios.post("/api/insert-bricks/insert-bricks", {
                 url, setnumber, json,
             });
-           
+
         } catch (error) {
             console.error("Error creating post:", error);
         }
@@ -45,28 +47,31 @@ const InsertBricks = () => {
 
     return (
         <>
-            <h1>InsertBricks</h1>
+            <h1>Insert Bricks</h1>
+            <div className="insert-bricks">
+                <div>
 
-            <ParsedJsonTable rowButtonClick={setRow} />
+                    <h3>Insert Brick list for specific SET</h3>
+                    <div>url {parsedJsonRow.url}</div>
+                    <div>setNumber {parsedJsonRow.setnumber}</div>
+                    <button onClick={() => fetchPreviewData()}>preview SQL </button>
+                    <div>
+                        {previewQuery}
+                    </div>
+                    <hr />
+                    <button onClick={() => insertData()}>insert data</button>
 
-            <div>url {parsedJsonRow.url}</div>
-            <div>setNumber {parsedJsonRow.setnumber}</div>
-            {/* <div>json {parsedJsonRow.json}</div> */}
+                    <h4>preview prepared JSON</h4>
+                    <pre>
+                        {parsedJsonRow.json}
+                    </pre>
+                </div>
 
-            <button onClick={() => fetchPreviewData()}>preview data</button>
+                <div>
+                    <ParsedJsonTable rowButtonClick={setRow} />
+                </div>
 
-            <div>
-                {previewQuery}
             </div>
-            <hr />
-
-            <button onClick={() => insertData()}>insert data</button>
-
-
-            <pre>
-                {parsedJsonRow.json}
-            </pre>
-
         </>
     )
 };

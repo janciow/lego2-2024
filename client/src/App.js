@@ -2,14 +2,13 @@ import './App.css';
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-import Parser from './pages/parser/Parser';
+import CreateDatabase from './pages/create-database/CreateDatabase';
+import Home from './pages/Home';
+import ImportImages from './pages/import-images/ImportImages';
+import InsertBricks from './pages/insert-bricks/InsertBricks';
 import Layout from './pages/layout/Layout';
 import NoPage from './pages/NoPage';
-import Home from './pages/Home';
-import InsertBricks from './pages/InsertBricks';
-import CreateDatabase from './pages/create-database/CreateDatabase';
-
-import ImportImages from './pages/import-images/ImportImages';
+import Parser from './pages/parser/Parser';
 
 function App() {
   return (

@@ -8,6 +8,7 @@ const CreateDatabase = () => {
 
     const [baseColors, setBaseColors] = useState([]);
     const [exactColors, setExactColors] = useState([]);
+    const [bricks, setBricks] = useState([]);
 
     useEffect(() => {
         getBaseColors();
@@ -17,7 +18,7 @@ const CreateDatabase = () => {
     // // Function to submit the form data using Axios
     const createBaseColorTable = async () => {
         try {
-             await axios.post("/api/create-database/create-color-family-table");
+            await axios.post("/api/create-database/create-color-family-table");
         } catch (error) {
             console.error("Error creating post:", error);
         }
@@ -25,7 +26,7 @@ const CreateDatabase = () => {
 
     const insertBaseColors = async () => {
         try {
-             await axios.post("/api/create-database/insert-colors-family");
+            await axios.post("/api/create-database/insert-colors-family");
         } catch (error) {
             console.error("Error creating post:", error);
         }
@@ -58,6 +59,15 @@ const CreateDatabase = () => {
         }
     };
 
+    const getBricks = async () => {
+        try {
+            const response = await axios.get("/api/create-database/brick");
+            setBricks(response.data.result)
+        } catch (error) {
+            console.error("Error creating post:", error);
+        }
+    };
+
 
     const createBrickTable = async () => {
         try {
@@ -68,55 +78,72 @@ const CreateDatabase = () => {
     };
 
     return (
-        <div className="create-database">
-            <h1>Create Database 3</h1>
-            <h2>Base Colors</h2>
-            <div className="create-database__wrapper">
-                <div className="create-database__buttons">
-                    <h3>Create Base Colors table</h3>
-                    <button onClick={() => createBaseColorTable()}>Create Base Colors table</button>
 
-                    <h3>Insert Base Colors </h3>
-                    <button onClick={() => insertBaseColors()}>Insert Base Colors</button>
+        <>
+            <h1>Create Database</h1>
 
-                    <h3>Display all Base Colors  </h3>
-                    <button onClick={() => getBaseColors()}>Display Base Colors</button>
+            <div className="create-database">
+
+                <div className="create-database__panel create-database__panel--bricks">
+                    <h2> Brick </h2>
+                    <div className="create-database__wrapper">
+                        <div className="create-database__buttons">
+                            <h3>Create Brick table</h3>
+                            <button onClick={() => createBrickTable()}>Create Brick table</button>
+
+                            <h3>Reload Brick</h3>
+                            <button onClick={() => getBricks()}>bach Brick</button>
+                        </div>
+
+                        <div className="create-database__table">
+                            <SimpleTable list={bricks} key1="element_id" key2="description" />
+                        </div>
+                    </div>
                 </div>
-                <div className="create-database__table">
-                    <SimpleTable list={baseColors} key1="id" key2="name" />
+
+                <div className="create-database__panel">
+                    <h2>Base Colors</h2>
+                    <div className="create-database__wrapper">
+                        <div className="create-database__buttons">
+                            <h3>Create Base Colors table</h3>
+                            <button onClick={() => createBaseColorTable()}>Create Base Colors table</button>
+
+                            <h3>Insert Base Colors </h3>
+                            <button onClick={() => insertBaseColors()}>Insert Base Colors</button>
+
+                            <h3>Display all Base Colors  </h3>
+                            <button onClick={() => getBaseColors()}>Display Base Colors</button>
+                        </div>
+                        <div className="create-database__table">
+                            <SimpleTable list={baseColors} key1="id" key2="name" />
+                        </div>
+                    </div>
+
                 </div>
+
+
+
+                <div className="create-database__panel">
+                    <h2> Exact Colors </h2>
+                    <div className="create-database__wrapper">
+                        <div className="create-database__buttons">
+                            <h3>Create Exact Colors table</h3>
+                            <button onClick={() => createExactColorTable()}>Create exact Colors table</button>
+
+                            <h3>Display all Exact Colors</h3>
+                            <button onClick={() => getExactColors()}>Exact Colors</button>
+                        </div>
+
+                        <div className="create-database__table">
+                            <SimpleTable list={exactColors} key1="color_exact_id" key2="name" />
+                        </div>
+                    </div>
+                </div>
+
+
+
             </div>
-            <hr />
-            <h2> Exact Colors </h2>
-            <div className="create-database__wrapper">
-                <div className="create-database__buttons">
-                    <h3>Create Exact Colors table</h3>
-                    <button onClick={() => createExactColorTable()}>Create exact Colors table</button>
-
-                    <h3>get Exact Colors</h3>
-                    <button onClick={() => getExactColors()}>get exact Colors</button>
-                </div>
-
-                <div className="create-database__table">
-                    <SimpleTable list={exactColors} key1="color_exact_id" key2="name" />
-                </div>
-            </div>
-            <hr />
-            <h2> Brick </h2>
-            <div className="create-database__wrapper">
-                <div className="create-database__buttons">
-                    <h3>Create Brick table</h3>
-                    <button onClick={() => createBrickTable()}>Create Brick table</button>
-
-                    {/* <h3>get Exact Colors</h3>
-                    <button onClick={() => getExactColors()}>get exact Colors</button> */}
-                </div>
-
-                <div className="create-database__table">
-                    <SimpleTable list={exactColors} key1="color_exact_id" key2="name" />
-                </div>
-            </div>
-        </div>
+        </>
     );
 
 };

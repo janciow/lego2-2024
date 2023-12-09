@@ -31,8 +31,8 @@ router.post('/create-links-table', (req, res) => {
   res.send({ INSERT: true });
 });
 
-// /parser/add-link
-router.post('/add-link', async (req, res) => {
+// /parser/insert-json-to-db
+router.post('/insert-json-to-db', async (req, res) => {
     const url = req.body.url;
     const setNumber = req.body.setNumber;
     const json = req.body.json || '';

@@ -5,8 +5,8 @@ const SimpleTable = (props) => {
             <table >
                 <thead>
                     <tr>
-                        <td>id</td>
-                        <td>name</td>
+                        <td>Id</td>
+                        <td>Name</td>
                     </tr>
                 </thead>
                 <tbody>

@@ -22,9 +22,6 @@ const Layout = () => {
           <li>
             <Link to="/insert-bricks">Insert bricks to DB</Link>
           </li>
-          <li>
-            <Link to="/create-database">Create database</Link>
-          </li>
         </ul>
       </nav>
 
