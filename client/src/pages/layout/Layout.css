@@ -6,7 +6,6 @@
 
 .layout__img {
   position: absolute;
-  width: 100vw;
   height: 100%;
   background-image: url('/public/img/homark.jpg');
   background-repeat: no-repeat;

@@ -12,11 +12,16 @@ const InsertBricks = () => {
         json: '',
     });
 
-    const [previewQuery, getPreviewQuery] = useState('');
+    const [previewQuery, setPreviewQuery] = useState({
+        sql: '',
+        colors: []
+    });
 
     const setRow = (json, setnumber, url) => {
         getParsedJsonRow({ setnumber, url, json });
     };
+
+
 
     const fetchPreviewData = async () => {
         try {
@@ -25,11 +30,22 @@ const InsertBricks = () => {
             const response = await axios.post("/api/insert-bricks/preview-data-to-insert-bricks", {
                 url, setnumber, json,
             });
-            getPreviewQuery(response.data.brickQuery);
+            setPreviewQuery({
+                sql: response.data.brickQuery,
+                colors: response.data.colors
+            });
         } catch (error) {
             console.error("Error creating post:", error);
         }
     };
+
+    const clearPreviewData = async () => {
+        setPreviewQuery({
+            sql: '',
+            colors: []
+        });
+    };
+
     const insertData = async () => {
         try {
 
@@ -55,8 +71,12 @@ const InsertBricks = () => {
                     <div>url {parsedJsonRow.url}</div>
                     <div>setNumber {parsedJsonRow.setnumber}</div>
                     <button onClick={() => fetchPreviewData()}>preview SQL </button>
+                    <button onClick={() => clearPreviewData()}>clear Preview Data </button>
+                    {/* <div>
+                        {previewQuery.sql}
+                    </div> */}
                     <div>
-                        {previewQuery}
+                        {previewQuery.colors.map(color => <div>{color}</div>)}
                     </div>
                     <hr />
                     <button onClick={() => insertData()}>insert data</button>

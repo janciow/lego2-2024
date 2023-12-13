@@ -3,6 +3,12 @@ const pgClient = require("../../db_connect");
 const router = express.Router();
 
 const prepareBrickData = require('./prepareBrickData');
+const prepareSetsData = require('./prepareSetsData');
+
+const brickValuesCreate = (brickData) => {
+    return brickData.map(value => `('${value[0]}', '${value[1]}', '${value[2]}', '${value[3]}', ${value[4]}, $$${value[5]}$$, '${value[6]}' )`);
+
+}
 
 // /insert-bricks/insert-bricks
 router.post('/preview-data-to-insert-bricks', (req, res) => {
@@ -19,18 +25,43 @@ router.post('/preview-data-to-insert-bricks', (req, res) => {
     let values = colors.map(value => `('${value[0]}', '${value[1]}', ${value[2]})`);
 
     const insertColorQuery = `
-    INSERT INTO color_exact (color_exact_id, name, color_family_id) 
-    VALUES ${values}
-    ON CONFLICT DO NOTHING; 
+        INSERT INTO color_exact (color_exact_id, name, color_family_id) 
+        VALUES ${values}
+        ON CONFLICT DO NOTHING; 
     `;
 
-    let brickValues = brickData.slice(180, 190).map(value => `('${value[0]}', '${value[1]}', '${value[2]}', '${value[3]}', ${value[4]}, $$${value[5]}$$, '${value[6]}' )`);
+    let brickValues = brickValuesCreate(brickData);
 
     const brickQuery = `INSERT INTO brick (color_exact_id, category, element_id, model_id, price, description, img_pathname) 
         VALUES ${brickValues}
         ON CONFLICT DO NOTHING; `;
 
-    res.send({ insertColorQuery, brickQuery });
+    const setQuery = `
+        INSERT INTO lego_sets (set_number, name, description) 
+        VALUES ('${setNumber}', $$${legoSetBrickModel["setTitle"]}$$, '')
+        ON CONFLICT DO NOTHING; 
+        `;
+
+    // set_number VARCHAR(20) NOT NULL,
+    // element_id VARCHAR(20) NOT NULL,
+    // quantity INT,
+    // quantity_in_set INT,
+
+
+   
+
+    const setPartData = prepareSetsData(legoSetBrickModel[setNumber], setNumber);
+
+    const setPartsValues = setPartData.map(value => `('${value[0]}', '${value[1]}', ${value[2]})`);
+
+    const setPartsQuery = `INSERT INTO lego_set_parts (set_number, element_id, quantity) VALUES ${setPartsValues} ON CONFLICT DO NOTHING;`;
+
+    res.send({
+        setPartData,
+        setQuery,
+        brickQuery,
+        colors: values,
+    });
 });
 
 
@@ -46,12 +77,10 @@ router.post('/insert-bricks', (req, res) => {
 
     const setData = [[legoSetBrickModel["setNumber"], legoSetBrickModel["setTitle"], ""]];
 
-
-
     let colorsValues = colors.map(value => `('${value[0]}', '${value[1]}', ${value[2]})`);
 
     const insertColorQuery = `
-        INSERT INTO color_exact (color_exact_id, name, color_family_id) 
+        INSERT INTO color_exact (color_exact_id, set_name, color_family_id) 
         VALUES ${colorsValues}
         ON CONFLICT DO NOTHING; 
     `;
@@ -62,11 +91,9 @@ router.post('/insert-bricks', (req, res) => {
             res.send({ INSERT: err });
         });
 
-    console.log(brickData.length)
+    let brickValues = brickValuesCreate(brickData);
 
-    let brickValues = brickData.map(value => `('${value[0]}', '${value[1]}', '${value[2]}', '${value[3]}', ${value[4]}, $$${value[5]}$$, '${value[6]}' )`);
-
-    const brickQuery = `INSERT INTO brick (color_exact_id, category, element_id, model_id, price, description, img_pathname) 
+    const brickQuery = ` INSERT INTO brick (color_exact_id, category, element_id, model_id, price, description, img_pathname) 
             VALUES ${brickValues}
             ON CONFLICT DO NOTHING; `;
 
@@ -76,8 +103,14 @@ router.post('/insert-bricks', (req, res) => {
             res.send({ INSERT: err });
         });
 
+    const setQuery = `INSERT INTO lego_sets (set_number, set_name, description) VALUES ('${setNumber}', $$${legoSetBrickModel["setTitle"]}$$, '') ON CONFLICT DO NOTHING;`;
 
-    res.send({ brickQuery });
+    pgClient
+        .query(setQuery)
+        .catch((err) => {
+            res.send({ INSERT: err });
+        });
+
 });
 
 module.exports = router;

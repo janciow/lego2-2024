@@ -68,10 +68,35 @@ const CreateDatabase = () => {
         }
     };
 
+    const getLegoSets = async () => {
+        try {
+            const response = await axios.get("/api/create-database/lego-sets");
+            setBricks(response.data.result)
+        } catch (error) {
+            console.error("Error creating post:", error);
+        }
+    };
+
 
     const createBrickTable = async () => {
         try {
             await axios.post("/api/create-database/create-brick-table");
+        } catch (error) {
+            console.error("Error creating post:", error);
+        }
+    };
+
+    const createLegoSetsTable = async () => {
+        try {
+            await axios.post("/api/create-database/create-lego-sets-table");
+        } catch (error) {
+            console.error("Error creating post:", error);
+        }
+    };
+
+    const createLegoSetsPartsTable = async () => {
+        try {
+            await axios.post("/api/create-database/create-lego-sets-parts-table");
         } catch (error) {
             console.error("Error creating post:", error);
         }
@@ -91,8 +116,17 @@ const CreateDatabase = () => {
                             <h3>Create Brick table</h3>
                             <button onClick={() => createBrickTable()}>Create Brick table</button>
 
+                            <h3>Create Lego Sets table</h3>
+                            <button onClick={() => createLegoSetsTable()}>Create Lego Sets table</button>
+
+                            <h3>Create Lego Sets Parts table</h3>
+                            <button onClick={() => createLegoSetsPartsTable()}>Create Lego Sets Parts table</button>
+
                             <h3>Reload Brick</h3>
                             <button onClick={() => getBricks()}>bach Brick</button>
+
+                            <h3>Reload lego sets</h3>
+                            <button onClick={() => getLegoSets()}>bach Lego sets</button>
                         </div>
 
                         <div className="create-database__table">

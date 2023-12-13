@@ -95,6 +95,7 @@ router.post('/create-brick-table', (req, res) => {
         category VARCHAR(100),
         model_id VARCHAR(16),
         price DECIMAL(8, 2),
+        weight DECIMAL(8, 3),
         description VARCHAR(200),
         img_pathname VARCHAR(200),
         quantity_free_bricks INT,
@@ -120,6 +121,59 @@ router.get('/brick', async (req, res) => {
         select * from brick;
     `, []);
     res.send({ result: result.rows });
+});
+
+// /create-database/lego-sets
+router.get('/lego-sets', async (req, res) => {
+    const result = await pgClient.query(`
+        select * from lego_sets;
+    `, []);
+    res.send({ result: result.rows });
+});
+
+
+// /create-database/create-lego-sets-table
+router.post('/create-lego-sets-table', (req, res) => {
+    pgClient.query(`
+    CREATE TABLE IF NOT EXISTS lego_sets(
+        set_number VARCHAR(20) UNIQUE,
+        set_name VARCHAR(100),
+        price DECIMAL(8, 2),
+  		description VARCHAR(200),
+    PRIMARY KEY (set_number)
+      );
+      `)
+        .catch((err) => {
+            res.send({ INSERT: err });
+            return;
+        });
+
+    res.send({ CREATE: 'ok' });
+});
+
+// /create-database/create-lego-sets-parts-table
+router.post('/create-lego-sets-parts-table', (req, res) => {
+    pgClient.query(`
+    CREATE TABLE IF NOT EXISTS lego_set_parts (
+        set_number VARCHAR(20) NOT NULL,
+        element_id VARCHAR(20) NOT NULL,
+        quantity INT,
+        quantity_in_set INT,
+       PRIMARY KEY(set_number, element_id),
+       CONSTRAINT fk_brick
+          FOREIGN KEY(element_id) 
+              REFERENCES brick(element_id),
+       CONSTRAINT fk_sets
+          FOREIGN KEY(set_number) 
+              REFERENCES lego_sets(set_number)
+      );
+      `)
+        .catch((err) => {
+            res.send({ INSERT: err });
+            return;
+        });
+
+    res.send({ CREATE: 'ok' });
 });
 
 
