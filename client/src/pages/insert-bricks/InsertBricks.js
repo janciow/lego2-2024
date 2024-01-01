@@ -14,7 +14,8 @@ const InsertBricks = () => {
 
     const [previewQuery, setPreviewQuery] = useState({
         sql: '',
-        colors: []
+        colors: [],
+        setPartsQuery: ''
     });
 
     const setRow = (json, setnumber, url) => {
@@ -32,7 +33,8 @@ const InsertBricks = () => {
             });
             setPreviewQuery({
                 sql: response.data.brickQuery,
-                colors: response.data.colors
+                colors: response.data.colors,
+                setPartsQuery: response.data.setPartsQuery
             });
         } catch (error) {
             console.error("Error creating post:", error);
@@ -72,14 +74,14 @@ const InsertBricks = () => {
                     <div>setNumber {parsedJsonRow.setnumber}</div>
                     <button onClick={() => fetchPreviewData()}>preview SQL </button>
                     <button onClick={() => clearPreviewData()}>clear Preview Data </button>
-                    {/* <div>
-                        {previewQuery.sql}
-                    </div> */}
+                    <div>
+                        {previewQuery.setPartsQuery}
+                    </div>
                     <div>
                         {previewQuery.colors.map(color => <div>{color}</div>)}
                     </div>
                     <hr />
-                    <button onClick={() => insertData()}>insert data</button>
+                    <button onClick={() => insertData()}>insert bricks data</button>
 
                     <h4>preview prepared JSON</h4>
                     <pre>

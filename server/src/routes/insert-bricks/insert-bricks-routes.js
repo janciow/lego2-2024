@@ -48,7 +48,7 @@ router.post('/preview-data-to-insert-bricks', (req, res) => {
     // quantity_in_set INT,
 
 
-   
+
 
     const setPartData = prepareSetsData(legoSetBrickModel[setNumber], setNumber);
 
@@ -57,7 +57,7 @@ router.post('/preview-data-to-insert-bricks', (req, res) => {
     const setPartsQuery = `INSERT INTO lego_set_parts (set_number, element_id, quantity) VALUES ${setPartsValues} ON CONFLICT DO NOTHING;`;
 
     res.send({
-        setPartData,
+        setPartsQuery,
         setQuery,
         brickQuery,
         colors: values,
@@ -66,7 +66,7 @@ router.post('/preview-data-to-insert-bricks', (req, res) => {
 
 
 // /insert-bricks/insert-bricks
-router.post('/insert-bricks', (req, res) => {
+router.post('/insert-bricks', async (req, res) => {
 
     const url = req.body.url;
     const setNumber = req.body.setnumber;
@@ -80,16 +80,10 @@ router.post('/insert-bricks', (req, res) => {
     let colorsValues = colors.map(value => `('${value[0]}', '${value[1]}', ${value[2]})`);
 
     const insertColorQuery = `
-        INSERT INTO color_exact (color_exact_id, set_name, color_family_id) 
+        INSERT INTO color_exact (color_exact_id, name, color_family_id) 
         VALUES ${colorsValues}
         ON CONFLICT DO NOTHING; 
     `;
-
-    pgClient
-        .query(insertColorQuery)
-        .catch((err) => {
-            res.send({ INSERT: err });
-        });
 
     let brickValues = brickValuesCreate(brickData);
 
@@ -97,19 +91,30 @@ router.post('/insert-bricks', (req, res) => {
             VALUES ${brickValues}
             ON CONFLICT DO NOTHING; `;
 
-    pgClient
-        .query(brickQuery)
-        .catch((err) => {
-            res.send({ INSERT: err });
-        });
-
     const setQuery = `INSERT INTO lego_sets (set_number, set_name, description) VALUES ('${setNumber}', $$${legoSetBrickModel["setTitle"]}$$, '') ON CONFLICT DO NOTHING;`;
 
-    pgClient
-        .query(setQuery)
-        .catch((err) => {
-            res.send({ INSERT: err });
-        });
+
+    const setPartData = prepareSetsData(legoSetBrickModel[setNumber], setNumber);
+
+    const setPartsValues = setPartData.map(value => `('${value[0]}', '${value[1]}', ${value[2]})`);
+
+    const setPartsQuery = `INSERT INTO lego_set_parts (set_number, element_id, quantity) VALUES ${setPartsValues} ON CONFLICT DO NOTHING;`;
+
+    try {
+        await Promise.all([
+            pgClient.query(insertColorQuery),
+            pgClient.query(brickQuery),
+            pgClient.query(setQuery),
+            pgClient.query(setPartsQuery),
+        ]);
+
+
+        res.send({ ok: 'ok' });
+    } catch (error) {
+        res.send({ error });
+    } finally {
+
+    }
 
 });
 

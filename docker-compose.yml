@@ -17,6 +17,7 @@ services:
     networks:
       - create_db_default
   api:
+    env_file: ./.env
     ports:
       - 5000:5000
     build:
@@ -25,10 +26,10 @@ services:
     volumes:
       - ./server/src:/app/src
     environment:
-      - PGUSER=jan.bancarewicz
-      - PGHOST=postgres
-      - PGDATABASE=jan_db
-      - PGPASSWORD=1qaz2wsx#EDC
+      - PGUSER=$PGUSER
+      - PGHOST=$PGHOST
+      - PGDATABASE=$PGDATABASE
+      - PGPASSWORD=$PGPASSWORD
       - PGPORT=5432
     networks:
       - create_db_default

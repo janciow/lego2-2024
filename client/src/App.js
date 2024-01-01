@@ -9,6 +9,8 @@ import InsertBricks from './pages/insert-bricks/InsertBricks';
 import Layout from './pages/layout/Layout';
 import NoPage from './pages/NoPage';
 import Parser from './pages/parser/Parser';
+import Bricks from './pages/bricks/Bricks';
+import ImportBricks from './pages/import-bricks/ImportBricks';
 
 function App() {
   return (
@@ -21,6 +23,8 @@ function App() {
           <Route path="import-images" element={<ImportImages />} />
           <Route path="insert-bricks" element={<InsertBricks />} />
           <Route path="create-database" element={<CreateDatabase />} />
+          <Route path="bricks" element={<Bricks />} />
+          <Route path="import-bricks" element={<ImportBricks />} />
           <Route path="*" element={<NoPage />} />
         </Route>
       </Routes>

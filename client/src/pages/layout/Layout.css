@@ -5,13 +5,18 @@
 }
 
 .layout__img {
-  position: absolute;
+  position: fixed;
   height: 100%;
   background-image: url('/public/img/homark.jpg');
   background-repeat: no-repeat;
   background-size: cover;
   opacity: 0.1;
   z-index: 1;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background-position: center;
 }
 
 nav {

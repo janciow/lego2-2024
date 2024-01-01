@@ -127,6 +127,11 @@ const setLinks = [
       url:
         "https://www.bricklink.com/catalogItemInv.asp?fromForm=Y&itemType=S&itemNo=6271&itemSeq=1",
     },
+    {
+      setNumber: "60004",
+      url:
+        "https://www.bricklink.com/CatalogItemInv.asp?S=60004-1",
+    },
   ];
 // /parser/ink/list
 router.get('/link/list', (req, res) => {

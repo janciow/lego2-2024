@@ -1,0 +1,11 @@
+.insert-bricks {
+  display: grid;
+  grid-template-columns: 50% 30%;
+  gap: 5%;
+}
+
+.import__wrapper {
+  display: grid;
+  grid-template-columns: max-content max-content;
+  justify-content: space-around;
+}

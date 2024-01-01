@@ -1,25 +1,27 @@
 version: "3.8"
 services:
   postgres:
+    env_file: ../.env
     image: "postgres:latest"
     container_name: local_pgdb
     restart: always
     ports:
       - "5432:5432"
     environment:
-      POSTGRES_USER: jan.bancarewicz
-      POSTGRES_PASSWORD: 1qaz2wsx#EDC
+      POSTGRES_USER: $PGUSER
+      POSTGRES_PASSWORD: $PGPASSWORD
     volumes:
       - local_pgdata:/var/lib/postgresql/data
   pgadmin:
+    env_file: ../.env
     image: dpage/pgadmin4
     container_name: pgadmin4_container
     restart: always
     ports:
       - "8888:80"
     environment:
-      PGADMIN_DEFAULT_EMAIL: jan.bancarewicz@gmail.com
-      PGADMIN_DEFAULT_PASSWORD: 1qaz2wsx#EDC
+      PGADMIN_DEFAULT_EMAIL: $PGADMIN_DEFAULT_EMAIL
+      PGADMIN_DEFAULT_PASSWORD: $PGPASSWORD
     volumes:
       - pgadmin-data:/var/lib/pgadmin
 volumes:
