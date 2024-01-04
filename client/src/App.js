@@ -11,6 +11,8 @@ import NoPage from './pages/NoPage';
 import Parser from './pages/parser/Parser';
 import Bricks from './pages/bricks/Bricks';
 import ImportBricks from './pages/import-bricks/ImportBricks';
+import Sets from './pages/sets/Sets';
+import Set from './pages/sets/set/Set';
 
 function App() {
   return (
@@ -24,6 +26,8 @@ function App() {
           <Route path="insert-bricks" element={<InsertBricks />} />
           <Route path="create-database" element={<CreateDatabase />} />
           <Route path="bricks" element={<Bricks />} />
+          <Route path="sets" element={<Sets />} />
+          <Route path="sets/:setId" element={<Set />} />
           <Route path="import-bricks" element={<ImportBricks />} />
           <Route path="*" element={<NoPage />} />
         </Route>

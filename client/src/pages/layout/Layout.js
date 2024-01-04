@@ -28,6 +28,9 @@ const Layout = () => {
           <li>
             <Link to="/bricks">Bricks</Link>
           </li>
+          <li>
+            <Link to="/sets">Sets</Link>
+          </li>
         </ul>
       </nav>
 

@@ -1,0 +1,5 @@
+.sets {
+  display: grid;
+  grid-template-columns: 50% 30%;
+  gap: 5%;
+}

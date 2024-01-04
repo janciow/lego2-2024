@@ -1,6 +1,10 @@
 const MediumTable = (props) => {
-    const { fields = [], rows = [] } = props;
+    const { fields = [], rows = [], keyIndex = 0 } = props;
 
+    const rowSelect = (row) => {
+        console.log(row)
+        props.onClick && props.onClick(row)
+    }
 
     return (
         <>
@@ -8,15 +12,15 @@ const MediumTable = (props) => {
                 <thead>
                     <tr>
                         {fields.map(({ name }) => (
-                            <th>{name}</th>
+                            <th key={name}>{name}</th>
                         ))}
                     </tr>
                 </thead>
                 <tbody>
                     {rows.map((row) => (
-                        <tr key={row[fields[0].name]}>
+                        <tr key={row[fields[keyIndex].name]} onClick={() => rowSelect(row)} style={{ cursor: "pointer" }}>
                             {fields.map(({ name }) => (
-                                <td>{row[name]}</td>
+                                <td key={row[name]}>{row[name]}</td>
                             ))}
                         </tr>
                     ))}
